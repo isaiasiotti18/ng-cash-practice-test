@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  app:
+    container_name: ng-cash-practice-test-app
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    command: npm run start:dev
+    env_file:
+      - .env
+    networks:
+     - ngcashpracticetestnetwork
+    depends_on:
+      - database
+  database:
+    container_name: ng-cash-practice-test-db
+    image: postgres:14
+    networks:
+      - ngcashpracticetestnetwork
+    environment:
+      POSTGRES_PASSWORD: pass_ngcashpracticetest
+      POSTGRES_USER: user_ngcashpracticetest
+      POSTGRES_DB: db_ngcashpracticetest
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+networks:
+  ngcashpracticetestnetwork:
+volumes:
+  pgdata:
