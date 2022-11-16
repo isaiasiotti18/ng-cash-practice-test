@@ -1,15 +1,14 @@
 import { DataSource } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
 
-const configService = new ConfigService();
+import { migrationsOrmConfig } from './migrationOrmConfig';
 
 export const datasource = new DataSource({
   type: 'postgres',
-  host: configService.get('POSTGRES_HOST'),
-  port: parseInt(configService.get('POSTGRES_PORT')),
-  username: configService.get('POSTGRES_USER'),
-  password: configService.get<string>('POSTGRES_PASSWORD'),
-  database: configService.get('POSTGRES_DB'),
+  host: migrationsOrmConfig.POSTGRES_HOST,
+  port: migrationsOrmConfig.POSTGRES_PORT,
+  username: migrationsOrmConfig.POSTGRES_USER,
+  password: migrationsOrmConfig.POSTGRES_PASSWORD,
+  database: migrationsOrmConfig.POSTGRES_DB,
   logging: true,
   entities: [__dirname + '/../../../modules/**/entities/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],

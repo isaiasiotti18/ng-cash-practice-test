@@ -1,0 +1,7 @@
+export const migrationsOrmConfig = {
+  POSTGRES_PASSWORD: 'pass_ngcashpracticetest',
+  POSTGRES_USER: 'user_ngcashpracticetest',
+  POSTGRES_DB: 'db_ngcashpracticetest',
+  POSTGRES_PORT: 5432,
+  POSTGRES_HOST: 'database',
+};
