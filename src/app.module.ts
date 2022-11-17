@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeormAsyncConfig } from './shared/database/typeorm/typeorm.config';
 import { UsersModule } from './modules/users/users.module';
+import { AccountsModule } from './modules/accounts/accounts.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -11,6 +13,8 @@ import { UsersModule } from './modules/users/users.module';
     }),
     TypeOrmModule.forRootAsync(typeormAsyncConfig),
     UsersModule,
+    AccountsModule,
+    TransactionsModule,
   ],
   controllers: [],
   providers: [],
