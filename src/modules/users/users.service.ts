@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { UserOutput } from '../../core/domain/users/interfaces/user-output.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  async findByUsername(username: string): Promise<User> {
+  async findByUsername(username: string): Promise<UserOutput> {
     throw new Error('Method not implemented.');
   }
 
