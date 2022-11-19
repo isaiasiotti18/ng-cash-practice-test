@@ -1,8 +1,8 @@
 import { LoginRequestBody } from './models/LoginRequestBody';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../modules/users/users.service';
-import * as bcrypt from 'bcrypt';
-import { User } from '../../modules/users/entities/user.entity';
+import * as bcrypt from 'bcryptjs';
+import { User } from '../../core/domain/users/user.entity';
 import { UserPayload } from './models/UserPayload';
 import { JwtService } from '@nestjs/jwt';
 import { UserToken } from './models/UserToken';

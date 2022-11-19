@@ -1,3 +1,5 @@
+import { FindAllUsersUsecase } from '../../core/app/users/usecases/find-all-users.usecase';
+import { CreateUserAndAccountUsecase } from './../../core/app/users/usecases/create-user-and-account.usecase';
 import {
   Controller,
   Get,
@@ -7,36 +9,42 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { IsPublic } from 'src/shared/auth/decorators/is-public.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  //constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  constructor(
+    private createUserAndAccountUsecase: CreateUserAndAccountUsecase,
+    private findAllUsersUsecase: FindAllUsersUsecase,
+  ) {}
+
+  @IsPublic()
+  @Post('create')
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.createUserAndAccountUsecase.execute(createUserDto);
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    return await this.findAllUsersUsecase.execute();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return;
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return;
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return;
   }
 }
