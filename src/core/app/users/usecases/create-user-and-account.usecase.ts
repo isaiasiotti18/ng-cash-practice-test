@@ -26,24 +26,23 @@ export class CreateUserAndAccountUsecase {
 
       if (!account) throw new Error('Unexpected Error creating account');
 
-      const newAccount = await this.accountRepository.saveAccountInDatabase(
-        account,
-      );
+      const saveAccountInDatabase =
+        await this.accountRepository.saveAccountInDatabase(account);
 
-      if (!newAccount) {
+      if (!saveAccountInDatabase) {
         throw new Error('Unexpected Error creating account');
       }
 
       const saveUserInDataBase = await this.userRepository.saveUserInDatabase({
         ...user,
-        accountId: newAccount.id,
+        accountId: saveAccountInDatabase.id,
       });
 
       return {
         id: saveUserInDataBase.id,
         username: saveUserInDataBase.username,
         password: undefined,
-        accountId: newAccount.id,
+        account: saveAccountInDatabase,
       };
     } catch (error: any) {
       throw new Error(error?.message);
