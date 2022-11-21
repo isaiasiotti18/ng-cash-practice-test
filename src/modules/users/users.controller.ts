@@ -1,5 +1,6 @@
+import { ViewMyBalanceAccountUsecase } from '../../core/app/users/usecases/view-my-balance-account.usecase';
 import { FindAllUsersUsecase } from '../../core/app/users/usecases/find-all-users.usecase';
-import { CreateUserAndAccountUsecase } from './../../core/app/users/usecases/create-user-and-account.usecase';
+import { CreateUserAndAccountUsecase } from '../../core/app/users/usecases/create-user-and-account.usecase';
 import {
   Controller,
   Get,
@@ -8,10 +9,15 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
+  ForbiddenException,
+  Request,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IsPublic } from 'src/shared/auth/decorators/is-public.decorator';
+import { AuthRequest } from 'src/shared/auth/models/AuthRequest';
 
 @Controller('users')
 export class UsersController {
@@ -20,31 +26,34 @@ export class UsersController {
   constructor(
     private createUserAndAccountUsecase: CreateUserAndAccountUsecase,
     private findAllUsersUsecase: FindAllUsersUsecase,
+    private viewMyBalanceAccountUsecase: ViewMyBalanceAccountUsecase,
   ) {}
 
   @IsPublic()
   @Post('create')
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.createUserAndAccountUsecase.execute(createUserDto);
+    try {
+      return await this.createUserAndAccountUsecase.execute(createUserDto);
+    } catch (error: any) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
   async findAll() {
-    return await this.findAllUsersUsecase.execute();
+    try {
+      return await this.findAllUsersUsecase.execute();
+    } catch (error: any) {
+      throw new ForbiddenException(error.message);
+    }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return;
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return;
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return;
+  @Get('/view-balance')
+  async viewMyBalance(@Request() req: AuthRequest) {
+    try {
+      return await this.viewMyBalanceAccountUsecase.execute(req.user.id);
+    } catch (error: any) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }

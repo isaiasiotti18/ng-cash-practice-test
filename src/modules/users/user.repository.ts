@@ -13,12 +13,39 @@ export class UserRepository implements UserRepositoryInterface {
     private repository: Repository<UserEntityTypeOrm>,
   ) {}
 
+  async findByUserId(userId: string): Promise<UserOutput> {
+    const user = await this.repository.findOne({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        username: true,
+        accountId: true,
+      },
+      relations: {
+        account: true,
+      },
+    });
+
+    return {
+      id: user?.id,
+      username: user?.username,
+      password: user?.password,
+      accountId: user?.accountId,
+      account: user?.account,
+    };
+  }
+
   async findAllUsers(): Promise<UserOutput[]> {
     const users = await this.repository.find({
       select: {
         id: true,
         username: true,
         accountId: true,
+      },
+      relations: {
+        account: true,
       },
     });
 
@@ -28,12 +55,18 @@ export class UserRepository implements UserRepositoryInterface {
         username: user.username,
         password: undefined,
         accountId: user.accountId,
+        account: user.account,
       };
     });
   }
 
-  async userExists(username: string): Promise<boolean> {
-    const user = await this.repository.findOneBy({ username });
+  async userExists(username?: string, userId?: string): Promise<boolean> {
+    const user = await this.repository
+      .createQueryBuilder()
+      .where('username = :username', { username })
+      .orWhere('id = :userId', { userId })
+      .getOne();
+
     return user ? true : false;
   }
 
@@ -47,6 +80,7 @@ export class UserRepository implements UserRepositoryInterface {
       username: user?.username,
       password: user?.password,
       accountId: user?.accountId,
+      account: user?.account,
     };
   }
 
