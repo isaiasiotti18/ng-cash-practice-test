@@ -2,9 +2,30 @@ POST http://localhost:3000/users/create
 Content-Type: application/json
 
 {
-  "username": "isaiasiotiprofissional",
-  "password": "123"
+  "username": "isaiasiotti",
+  "password": "Kero@10062022"
 }
 
 ###
-GET http://localhost:3000/users/
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "isaiasiotti",
+  "password": "Kero@10062022"
+}
+
+###
+GET http://localhost:3000/users/view-balance
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NTFmNWZlMi02ZjQ4LTRjMTYtOGIxZi1iODMyYmE5MzFhZjciLCJ1c2VybmFtZSI6ImlzYWlhc2lvdHRpIiwiYWNjb3VudElkIjoiMGQ3NjZhMDgtZjkxZS00MzgxLTk0MTctM2JhZTQ3YjI2ZGNhIiwiaWF0IjoxNjY5MDY2ODQ2LCJleHAiOjE2NjkxNTMyNDZ9.CEBaMmwCQh_vYFsQ0DJ_mLXWyhlENGG8licHxV-HDAg
+
+
+###
+POST http://localhost:3000/transactions/money-transfer
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NTFmNWZlMi02ZjQ4LTRjMTYtOGIxZi1iODMyYmE5MzFhZjciLCJ1c2VybmFtZSI6ImlzYWlhc2lvdHRpIiwiYWNjb3VudElkIjoiMGQ3NjZhMDgtZjkxZS00MzgxLTk0MTctM2JhZTQ3YjI2ZGNhIiwiaWF0IjoxNjY5MDY2ODQ2LCJleHAiOjE2NjkxNTMyNDZ9.CEBaMmwCQh_vYFsQ0DJ_mLXWyhlENGG8licHxV-HDAg
+Content-Type: application/json
+
+{
+  "usernameCashIn": "kerolainebrandao",
+  "value": 22.33
+}
