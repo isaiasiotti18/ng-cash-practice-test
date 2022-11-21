@@ -24,11 +24,33 @@ export class AccountRepository implements AccountRepositoryInterface {
     };
   }
   async saveAccountInDatabase(account: Account): Promise<AccountOutput> {
-    const newAccount = await this?.repository.save({ ...account });
+    const newAccount = await this.repository.save({ ...account });
 
     return {
       id: newAccount.id,
       balance: newAccount.balance,
     };
+  }
+
+  async cashIn(creditedAccountId: string, value: number): Promise<void> {
+    await this.repository
+      .createQueryBuilder()
+      .update()
+      .set({
+        balance: () => `balance + ${value}`,
+      })
+      .where('id = :creditedAccountId', { creditedAccountId })
+      .execute();
+  }
+
+  async cashOut(debitedAccountId: string, value: number): Promise<void> {
+    await this.repository
+      .createQueryBuilder()
+      .update()
+      .set({
+        balance: () => `balance - ${value}`,
+      })
+      .where('id = :debitedAccountId', { debitedAccountId })
+      .execute();
   }
 }

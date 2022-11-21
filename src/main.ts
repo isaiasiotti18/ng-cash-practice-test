@@ -1,13 +1,17 @@
 import { HttpExceptionFilter } from './shared/errors/execptions/http-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './shared/errors/execptions/all-exception.filter';
+import * as momentTimezone from 'moment-timezone';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    cors: true,
+    cors: {
+      methods: ['get', 'post', 'put', 'delete', 'patch'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+    },
     bodyParser: true,
   });
 
@@ -23,6 +27,12 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  Date.prototype.toJSON = function (): any {
+    return momentTimezone(this)
+      .tz('America/Sao_Paulo')
+      .format('YYYY-MM-DD HH:mm:ss.SSS');
+  };
 
   await app.listen(3000);
 }

@@ -2,13 +2,9 @@
 
 export class Account {
   public readonly id?: string;
-  public balance: number;
+  public balance = 100.00;
 
   static create(): Account {
     return new Account();
-  }
-
-  getAccountId() {
-    return this.id
   }
 }
