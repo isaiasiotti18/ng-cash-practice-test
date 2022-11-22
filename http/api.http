@@ -31,5 +31,5 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/transactions/find-transactions?createdAt=2022-11-22&creditedAccountId=yes&debitedAccountId=no
+GET http://localhost:3000/transactions/find-transactions?createdAt=2022-11-22&cashIn=yes&cashOut=no
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NTFmNWZlMi02ZjQ4LTRjMTYtOGIxZi1iODMyYmE5MzFhZjciLCJ1c2VybmFtZSI6ImlzYWlhc2lvdHRpIiwiYWNjb3VudElkIjoiMGQ3NjZhMDgtZjkxZS00MzgxLTk0MTctM2JhZTQ3YjI2ZGNhIiwiaWF0IjoxNjY5MTUzNDE0LCJleHAiOjE2NjkyMzk4MTR9.oTCHR_34A6pNBFiD3xVxOj3cZu1FkrSzQw3fuDwWshY

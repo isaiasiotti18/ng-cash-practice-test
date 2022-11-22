@@ -52,14 +52,14 @@ export class TransactionsController {
     @Query() filters: FilterTransactions,
     @Request() req: AuthRequest,
   ) {
-    const { createdAt, creditedAccountId, debitedAccountId } = filters;
+    const { createdAt, cashIn, cashOut } = filters;
 
     return await this.filterTransactionsByDateOrCashoutOrCashIn.execute(
       req.user.id,
       {
         createdAt: filters.createdAt,
-        creditedAccountId,
-        debitedAccountId,
+        cashIn,
+        cashOut,
       },
     );
   }

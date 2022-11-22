@@ -1,7 +1,7 @@
 export class FilterTransactions {
   createdAt?: Date;
 
-  creditedAccountId?: 'yes' | 'no';
+  cashIn?: 'yes' | 'no';
 
-  debitedAccountId?: 'yes' | 'no';
+  cashOut?: 'yes' | 'no';
 }

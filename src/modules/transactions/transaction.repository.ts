@@ -19,15 +19,7 @@ export class TransactionRepository implements TransactionRepositoryInterface {
     accountId: string,
     filters: FilterTransactions,
   ): Promise<[] | TransactionOutput[]> {
-    const { createdAt, creditedAccountId, debitedAccountId } = filters;
-
-    console.log({
-      accountId,
-      filters: {
-        creditedAccountId,
-        debitedAccountId,
-      },
-    });
+    const { createdAt, cashIn, cashOut } = filters;
 
     const queryDate =
       createdAt.toString().length === 10
@@ -35,14 +27,10 @@ export class TransactionRepository implements TransactionRepositoryInterface {
         : '';
 
     const queryDebitedAccountId =
-      debitedAccountId === 'yes'
-        ? `OR "debitedAccountId" = '${accountId}'`
-        : '';
+      cashOut === 'yes' ? `OR "debitedAccountId" = '${accountId}'` : '';
 
     const queryCreditedAccountId =
-      creditedAccountId === 'yes'
-        ? `OR "creditedAccountId" = '${accountId}'`
-        : '';
+      cashIn === 'yes' ? `OR "creditedAccountId" = '${accountId}'` : '';
 
     const querySelect = `SELECT * FROM transactions WHERE ${queryDate} ${queryDebitedAccountId} ${queryCreditedAccountId}`;
 
