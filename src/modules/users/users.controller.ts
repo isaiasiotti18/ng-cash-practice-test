@@ -39,15 +39,6 @@ export class UsersController {
     }
   }
 
-  @Get()
-  async findAll() {
-    try {
-      return await this.findAllUsersUsecase.execute();
-    } catch (error: any) {
-      throw new ForbiddenException(error.message);
-    }
-  }
-
   @Get('/view-balance')
   async viewMyBalance(@Request() req: AuthRequest) {
     try {

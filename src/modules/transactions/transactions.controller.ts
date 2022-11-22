@@ -37,7 +37,6 @@ export class TransactionsController {
     @Request() req: AuthRequest,
   ): Promise<TransactionOutput> {
     try {
-      console.log(await req.user);
       return await this.cashoutUsecase.execute({
         ...createTransactionDto,
         debitedAccountId: req.user.accountId,
@@ -57,28 +56,10 @@ export class TransactionsController {
     return await this.filterTransactionsByDateOrCashoutOrCashIn.execute(
       req.user.id,
       {
-        createdAt: filters.createdAt,
+        createdAt,
         cashIn,
         cashOut,
       },
     );
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTransactionDto: UpdateTransactionDto,
-  ) {
-    return this.transactionsService.update(+id, updateTransactionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.transactionsService.remove(+id);
   }
 }
