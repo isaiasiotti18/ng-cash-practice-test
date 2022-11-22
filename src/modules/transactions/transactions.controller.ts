@@ -1,3 +1,5 @@
+import { FilterTransactionsByDateOrCashoutOrCashIn } from './../../core/app/transactions/usecases/filter-transactions-by.usecase';
+import { FilterTransactions } from './../../core/domain/transactions/interfaces/filter-transactions.interface';
 import { AuthRequest } from 'src/shared/auth/models/AuthRequest';
 import { CashoutUsecase } from './../../core/app/transactions/usecases/cash-out.usecase';
 import {
@@ -11,17 +13,22 @@ import {
   Request,
   HttpStatus,
   HttpException,
+  Req,
+  RequestMapping,
+  Query,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionOutput } from 'src/core/domain/transactions/interfaces/transaction-output.interface';
+import { parse } from 'querystring';
 
 @Controller('transactions')
 export class TransactionsController {
   constructor(
     private readonly transactionsService: TransactionsService,
     private readonly cashoutUsecase: CashoutUsecase,
+    private readonly filterTransactionsByDateOrCashoutOrCashIn: FilterTransactionsByDateOrCashoutOrCashIn,
   ) {}
 
   @Post('/money-transfer')
@@ -40,9 +47,21 @@ export class TransactionsController {
     }
   }
 
-  @Get()
-  findAll() {
-    return this.transactionsService.findAll();
+  @Get('/find-transactions')
+  async findTransactions(
+    @Query() filters: FilterTransactions,
+    @Request() req: AuthRequest,
+  ) {
+    const { createdAt, creditedAccountId, debitedAccountId } = filters;
+
+    return await this.filterTransactionsByDateOrCashoutOrCashIn.execute(
+      req.user.id,
+      {
+        createdAt: filters.createdAt,
+        creditedAccountId,
+        debitedAccountId,
+      },
+    );
   }
 
   @Get(':id')

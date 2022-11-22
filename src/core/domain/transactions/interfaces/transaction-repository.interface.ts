@@ -4,7 +4,7 @@ import { TransactionOutput } from './transaction-output.interface';
 
 export interface TransactionRepositoryInterface {
   filterTransactionsBy(
-    id: string,
+    accountId: string,
     filters: FilterTransactions,
   ): Promise<TransactionOutput[] | []>;
   saveTransactionInDatabase(

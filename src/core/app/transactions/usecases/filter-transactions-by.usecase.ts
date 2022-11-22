@@ -18,10 +18,10 @@ export class FilterTransactionsByDateOrCashoutOrCashIn {
     if (!user) throw new Error('User was not found!');
 
     const transactions = await this.transactionRepository.filterTransactionsBy(
-      user.id,
+      user.accountId,
       filters,
     );
 
-    return transactions;
+    return await transactions;
   }
 }

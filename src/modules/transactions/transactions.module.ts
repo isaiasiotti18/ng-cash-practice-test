@@ -12,6 +12,7 @@ import { UserRepositoryInterface } from 'src/core/domain/users/interfaces/user-r
 import { UserRepository } from '../users/user.repository';
 import { AccountRepository } from '../accounts/account.repository';
 import { AccountsModule } from '../accounts/accounts.module';
+import { FilterTransactionsByDateOrCashoutOrCashIn } from 'src/core/app/transactions/usecases/filter-transactions-by.usecase';
 
 @Module({
   imports: [
@@ -37,6 +38,19 @@ import { AccountsModule } from '../accounts/accounts.module';
         );
       },
       inject: [UserRepository, AccountRepository, TransactionRepository],
+    },
+    {
+      provide: FilterTransactionsByDateOrCashoutOrCashIn,
+      useFactory: (
+        userRepository: UserRepositoryInterface,
+        transactionRepository: TransactionRepositoryInterface,
+      ) => {
+        return new FilterTransactionsByDateOrCashoutOrCashIn(
+          userRepository,
+          transactionRepository,
+        );
+      },
+      inject: [UserRepository, TransactionRepository],
     },
   ],
 })

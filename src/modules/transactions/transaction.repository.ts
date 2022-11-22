@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TransactionEntityTypeOrm } from './entities/transaction.entity';
 import { TransactionRepositoryInterface } from '../../core/domain/transactions/interfaces/transaction-repository.interface';
 import { Injectable } from '@nestjs/common';
@@ -14,27 +16,39 @@ export class TransactionRepository implements TransactionRepositoryInterface {
     private repository: Repository<TransactionEntityTypeOrm>,
   ) {}
   async filterTransactionsBy(
-    userId: string,
+    accountId: string,
     filters: FilterTransactions,
   ): Promise<[] | TransactionOutput[]> {
-    const { createdAt, cashIn, cashOut } = filters;
+    const { createdAt, creditedAccountId, debitedAccountId } = filters;
 
-    const debitedAccountId = cashOut ? userId : '';
-    const creditedAccountId = cashIn ? userId : '';
+    console.log({
+      accountId,
+      filters: {
+        creditedAccountId,
+        debitedAccountId,
+      },
+    });
 
-    return await this.repository
-      .createQueryBuilder()
-      .select([
-        'id',
-        'debitedAccountId',
-        'creditedAccountId',
-        'value',
-        'to_char(created_at, "DD-MM-YYYY") As createdAt',
-      ])
-      .where('created_at = :createdAt', { createdAt })
-      .orWhere('debitedAccountId = :debitedAccountId', { debitedAccountId })
-      .orWhere('creditedAccountId = :creditedAccountId', { creditedAccountId })
-      .getMany();
+    const queryDate =
+      createdAt.toString().length === 10
+        ? `DATE(created_at) = '${createdAt}'`
+        : '';
+
+    const queryDebitedAccountId =
+      debitedAccountId === 'yes'
+        ? `OR "debitedAccountId" = '${accountId}'`
+        : '';
+
+    const queryCreditedAccountId =
+      creditedAccountId === 'yes'
+        ? `OR "creditedAccountId" = '${accountId}'`
+        : '';
+
+    const querySelect = `SELECT * FROM transactions WHERE ${queryDate} ${queryDebitedAccountId} ${queryCreditedAccountId}`;
+
+    const transactions = await this.repository.query(querySelect);
+
+    return await transactions;
   }
   async saveTransactionInDatabase(
     transaction: Transaction,

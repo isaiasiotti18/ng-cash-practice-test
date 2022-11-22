@@ -1,5 +1,7 @@
-export interface FilterTransactions {
+export class FilterTransactions {
   createdAt?: Date;
-  cashIn?: boolean;
-  cashOut?: boolean;
+
+  creditedAccountId?: 'yes' | 'no';
+
+  debitedAccountId?: 'yes' | 'no';
 }
